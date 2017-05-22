@@ -30,7 +30,7 @@ class FacebookBrowser(Browser):
         login_button_id = None
 
         for line in self.browser.page_source.split('\n'):
-            print line
+            self.logger.debug(line)
             # find id of the username input box
             if "name=\"email\"" in line:
                 username_input_id = line.split('id=\"')[1].split('\"')[0]

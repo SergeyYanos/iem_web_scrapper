@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import threading
-
-# from browsers.LinkedInBrowser import LinkedInBrowser
-from selenium import webdriver
-
-from browsers.FacebookBrowser import FacebookBrowser
+from browsers.LinkedInBrowser import LinkedInBrowser
+# from browsers.FacebookBrowser import FacebookBrowser
 # from database.database import Database
 from utils import utils
 import ConfigParser
@@ -19,7 +16,7 @@ class SocialNetworksScraper:
         self.translator = None
         self.logger = utils.get_logger(self.__class__.__name__)
         self.webdriver_exec_path = \
-            r'C:\Users\sergeyy\Documents\School\IEM web scrapper\webdrivers\chromedriver.exe'
+            r'C:\Users\sergeyy\Desktop\git\iem_web_scrapper\webdrivers\chromedriver.exe'
         self.results = {}
         self.best_result = {}
 
@@ -47,7 +44,6 @@ class SocialNetworksScraper:
                 if len(f_translations) == 0:
                     self.logger.info("Translating {0}".format(first_name))
                     f_translations = self.translator.get_translations(first_name, first_name=True)
-                    # TODO: make sure it works:
                     if self.db:
                         if f_translations:
                             self.db.update_record(first_name, f_translations)
@@ -56,12 +52,10 @@ class SocialNetworksScraper:
                 if len(l_translations) == 0:
                     self.logger.info("Translating {0}".format(last_name))
                     l_translations = self.translator.get_translations(last_name, first_name=False)
-                    # TODO: make sure it works:
                     if self.db:
                         if l_translations:
                             self.db.update_record(last_name, l_translations)
                     self.logger.info("Translations for last name:\n%s" % l_translations)
-                    # print(l_translations)
             # for b in self.browsers:
             #     if b.supports_hebrew:
             #         t = threading.Thread(target=self.__scrape, args=(b, name))
@@ -168,12 +162,8 @@ class SocialNetworksScraper:
 
 
 if __name__ == "__main__":
-    browser = webdriver.Chrome(service_args=['--ignore-ssl-errors=true', '--ssl-protocol=TLSv1'])
-    browser.get("https://www.facebook.com/")
-    for line in self.browser.page_source.split('\n'):
-        print line
     config = ConfigParser.ConfigParser()
-    config.read(r"C:\Users\sergeyy\Desktop\BitBucket\iem_web_scraper\config\login.ini")
+    config.read(r"C:\Users\sergeyy\Desktop\git\iem_web_scrapper\config\login.ini")
 
     # TODO: make sure this works
     # print get_field_mapping(config, 'Database', 'main_table_name')
@@ -182,14 +172,14 @@ if __name__ == "__main__":
     # records = db.get_latest(5, config.get('Database', 'main_table_name'))
     # scraper = SocialNetworksScraper(db)
     # TODO: replace this with records retrieval from the DB.
-    records = [{'first_name': 'yaacov', 'last_name': 'shapiro', 'email': '', 'phone': '0503035177', 'address': '',
+    records = [{'first_name': 'eyal', 'last_name': 'kaplan', 'email': '', 'phone': '0503035177', 'address': '',
                 'work_place': 'mellanox', 'job_title': '', 'graduation_year': '2011', 'degree': 0, 'major': ''}]
 
     scraper = SocialNetworksScraper()
-    # scraper.add_browser(browser=LinkedInBrowser, username=config.get('Browsers', 'LinkedIn.username'),
-    #                     password=config.get('Browsers', 'LinkedIn.password'))
-    scraper.add_browser(browser=FacebookBrowser, username=config.get('Browsers', 'Facebook.username'),
-                        password=config.get('Browsers', 'Facebook.password'), translator=True)
+    scraper.add_browser(browser=LinkedInBrowser, username=config.get('Browsers', 'LinkedIn.username'),
+                        password=config.get('Browsers', 'LinkedIn.password'))
+    # scraper.add_browser(browser=FacebookBrowser, username=config.get('Browsers', 'Facebook.username'),
+    #                     password=config.get('Browsers', 'Facebook.password'), translator=True)
 
     for record in records:
         scraper.scrape(record)
